@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import os
 
 app = FastAPI(title="Policy Pundit API", description="AI-powered policy analysis and document processing API")
 
@@ -13,18 +14,12 @@ app.add_middleware(
         "https://policysynth.onrender.com",  # Render backend domain
         "https://your-frontend-domain.com",   # Replace with your frontend domain
         "http://localhost:3000",             # Common frontend dev port
+        "*"  # Allow all origins for testing
     ],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
-
-# Import routers conditionally to avoid startup errors
-try:
-    from app.routers import document
-    app.include_router(document.router, prefix="/api/v1")
-except ImportError as e:
-    print(f"Warning: Could not import document router: {e}")
 
 @app.get("/")
 async def root():
@@ -43,6 +38,24 @@ async def health_check():
         "status": "healthy",
         "timestamp": "2024-01-01T00:00:00Z"
     }
+
+@app.get("/test")
+async def test_endpoint():
+    """Test endpoint to verify the API is working"""
+    return {
+        "message": "API is working!",
+        "environment": os.getenv("ENVIRONMENT", "development")
+    }
+
+# Import routers conditionally to avoid startup errors
+try:
+    from app.routers import document
+    app.include_router(document.router, prefix="/api/v1")
+    print("✅ Document router loaded successfully")
+except ImportError as e:
+    print(f"⚠️ Warning: Could not import document router: {e}")
+except Exception as e:
+    print(f"⚠️ Warning: Error loading document router: {e}")
 
 if __name__ == "__main__":
     import uvicorn
