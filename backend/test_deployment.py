@@ -12,7 +12,6 @@ def test_imports():
         'fastapi',
         'uvicorn',
         'pydantic',
-        'pydantic_settings',
         'python_multipart',
         'python_dotenv',
         'requests',
