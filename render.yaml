@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: policysynth-backend
+    env: python
+    plan: free
+    buildCommand: |
+      cd backend
+      pip install -r requirements.txt
+    startCommand: |
+      cd backend
+      python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: OPENROUTER_API_KEY
+        sync: false
+    healthCheckPath: /health 
