@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import document
 
 app = FastAPI(title="Policy Pundit API", description="AI-powered policy analysis and document processing API")
 
@@ -20,7 +19,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(document.router, prefix="/api/v1")
+# Import routers conditionally to avoid startup errors
+try:
+    from app.routers import document
+    app.include_router(document.router, prefix="/api/v1")
+except ImportError as e:
+    print(f"Warning: Could not import document router: {e}")
 
 @app.get("/")
 async def root():

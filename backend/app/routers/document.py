@@ -4,11 +4,18 @@ from typing import List
 from pydantic import BaseModel
 import os
 import numpy as np
-from app.services.parser import parse_files
-from app.services.chunker import adaptive_chunk
-from app.services.simple_embedder import build_index, retrieve
-from app.services.logic import evaluate
-from app.services.output import generate_json
+
+# Import services with error handling
+try:
+    from app.services.parser import parse_files
+    from app.services.chunker import adaptive_chunk
+    from app.services.simple_embedder import build_index, retrieve
+    from app.services.logic import evaluate
+    from app.services.output import generate_json
+    SERVICES_AVAILABLE = True
+except ImportError as e:
+    print(f"Warning: Some services not available: {e}")
+    SERVICES_AVAILABLE = False
 
 router = APIRouter()
 
@@ -40,6 +47,9 @@ class QueryResult(BaseModel):
 
 @router.post("/upload/")
 async def upload_document(file: UploadFile = File(...)):
+    if not SERVICES_AVAILABLE:
+        raise HTTPException(status_code=503, detail="Document processing services not available")
+    
     if not file.filename.endswith(('.pdf', '.docx')):
         raise HTTPException(status_code=400, detail="Only PDF or DOCX files are allowed")
     
@@ -51,15 +61,18 @@ async def upload_document(file: UploadFile = File(...)):
         f.write(await file.read())
     
     global chunks, metadata, faiss_index
-    extracted_text = parse_files([file_path])
-    chunks, metadata = adaptive_chunk(extracted_text)
-    faiss_index = build_index(chunks)
-    
-    return JSONResponse(content={
-        "message": "Document uploaded successfully",
-        "chunks_processed": len(chunks),
-        "filename": file.filename
-    })
+    try:
+        extracted_text = parse_files([file_path])
+        chunks, metadata = adaptive_chunk(extracted_text)
+        faiss_index = build_index(chunks)
+        
+        return JSONResponse(content={
+            "message": "Document uploaded successfully",
+            "chunks_processed": len(chunks),
+            "filename": file.filename
+        })
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error processing document: {str(e)}")
 
 @router.get("/status/")
 async def get_status():
@@ -67,11 +80,15 @@ async def get_status():
     return JSONResponse(content={
         "documents_loaded": len(chunks) > 0,
         "chunks_count": len(chunks),
-        "index_built": faiss_index is not None
+        "index_built": faiss_index is not None,
+        "services_available": SERVICES_AVAILABLE
     })
 
 @router.post("/ask/", response_model=QueryResult)
 async def ask_question(request: QueryRequest):
+    if not SERVICES_AVAILABLE:
+        raise HTTPException(status_code=503, detail="Document processing services not available")
+    
     if not faiss_index or not chunks:
         raise HTTPException(status_code=400, detail="No document uploaded. Please upload a document first.")
     
