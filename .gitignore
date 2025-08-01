@@ -62,8 +62,20 @@ backend/data/uploaded_docs/
 *.xlsx
 *.xls
 *.csv
-*.json
 *.xml
+
+# JSON files (but allow vercel.json)
+*.json
+!vercel.json
+!package.json
+!package-lock.json
+!tsconfig.json
+!tsconfig.*.json
+!components.json
+!postcss.config.js
+!eslint.config.js
+!tailwind.config.ts
+!vite.config.ts
 
 # Environment variables
 .env
