@@ -2,9 +2,5 @@
   "name": "policy-pundit",
   "version": "1.0.0",
   "description": "Policy Pundit - AI-powered policy analysis",
-  "scripts": {
-    "build": "cd frontend && npm install && npm run build",
-    "dev": "cd frontend && npm run dev",
-    "install": "cd frontend && npm install"
-  }
+  "private": true
 } 
