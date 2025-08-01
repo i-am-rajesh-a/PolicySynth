@@ -23,12 +23,24 @@ echo "📦 Upgrading pip and installing build tools..."
 pip install --upgrade pip
 
 # Install build tools first
-pip install --no-cache-dir setuptools==65.5.1 wheel==0.38.4
+pip install --no-cache-dir setuptools==69.0.0 wheel==0.42.0
 
 echo "📦 Installing Python dependencies..."
 
-# Install dependencies with specific flags to avoid compilation issues
-pip install --no-cache-dir --prefer-binary -r requirements.txt
+# Try different requirements files in order of preference
+REQUIREMENTS_FILES=("requirements-python313.txt" "requirements.txt")
+
+for req_file in "${REQUIREMENTS_FILES[@]}"; do
+    if [ -f "$req_file" ]; then
+        echo "🔄 Trying to install from $req_file..."
+        if pip install --no-cache-dir --prefer-binary -r "$req_file"; then
+            echo "✅ Successfully installed dependencies from $req_file"
+            break
+        else
+            echo "❌ Failed to install from $req_file, trying next..."
+        fi
+    fi
+done
 
 echo "🧪 Testing deployment..."
 python test_deployment.py

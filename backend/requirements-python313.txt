@@ -1,0 +1,17 @@
+# Core FastAPI dependencies - Python 3.13 optimized
+fastapi==0.109.2
+uvicorn[standard]==0.27.1
+python-multipart==0.0.9
+python-dotenv==1.0.1
+pydantic==2.6.1
+
+# Document Processing
+PyMuPDF==1.23.26
+python-docx==1.1.0
+
+# Basic utilities
+requests==2.31.0
+
+# Build dependencies
+setuptools==69.0.0
+wheel==0.42.0 
