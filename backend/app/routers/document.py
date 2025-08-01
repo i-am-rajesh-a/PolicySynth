@@ -1,6 +1,6 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from fastapi.responses import JSONResponse
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 import os
 import numpy as np
@@ -32,7 +32,7 @@ class Evidence(BaseModel):
     text: str
     similarity_score: float
     source: str
-    section: str | None = None
+    section: Optional[str] = None
 
 class QueryResult(BaseModel):
     query: str
@@ -42,8 +42,8 @@ class QueryResult(BaseModel):
     decision_rationale: str
     confidence: float
     status: str
-    token_usage: int | None = None
-    processing_time: float | None = None
+    token_usage: Optional[int] = None
+    processing_time: Optional[float] = None
 
 @router.post("/upload/")
 async def upload_document(file: UploadFile = File(...)):
