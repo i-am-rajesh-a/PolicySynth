@@ -28,7 +28,7 @@ pip install --no-cache-dir setuptools==69.0.0 wheel==0.42.0
 echo "📦 Installing Python dependencies..."
 
 # Try different requirements files in order of preference
-REQUIREMENTS_FILES=("requirements-python313.txt" "requirements.txt")
+REQUIREMENTS_FILES=("requirements-python313.txt" "requirements.txt" "requirements-minimal.txt")
 
 for req_file in "${REQUIREMENTS_FILES[@]}"; do
     if [ -f "$req_file" ]; then
@@ -41,6 +41,11 @@ for req_file in "${REQUIREMENTS_FILES[@]}"; do
         fi
     fi
 done
+
+echo "🔍 Verifying installation..."
+python -c "import uvicorn; print('✅ uvicorn installed successfully')"
+python -c "import fastapi; print('✅ fastapi installed successfully')"
+python -c "import pydantic; print('✅ pydantic installed successfully')"
 
 echo "🧪 Testing deployment..."
 python test_deployment.py
