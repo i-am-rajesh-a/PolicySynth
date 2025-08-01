@@ -34,7 +34,8 @@ interface QueryResult {
   processing_time?: number;
 }
 
-const API_BASE_URL = 'http://127.0.0.1:8000/api/v1';
+// Use environment variable for API URL, fallback to localhost for development
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api/v1';
 
 const Index = () => {
   const [document, setDocument] = useState<Document | null>(null);
