@@ -4,9 +4,17 @@ from app.routers import document
 
 app = FastAPI(title="Policy Pundit API", description="AI-powered policy analysis and document processing API")
 
+# Updated CORS configuration for production
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8080", "http://localhost:5173", "http://127.0.0.1:8080"],
+    allow_origins=[
+        "http://localhost:8080", 
+        "http://localhost:5173", 
+        "http://127.0.0.1:8080",
+        "https://policysynth.onrender.com",  # Render backend domain
+        "https://your-frontend-domain.com",   # Replace with your frontend domain
+        "http://localhost:3000",             # Common frontend dev port
+    ],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
