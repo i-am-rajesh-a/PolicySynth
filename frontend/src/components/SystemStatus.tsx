@@ -7,7 +7,6 @@ import {
   Activity,
   CheckCircle2,
   AlertTriangle,
-  XCircle
 } from 'lucide-react';
 
 interface SystemStatusProps {
@@ -17,7 +16,7 @@ interface SystemStatusProps {
   tokensUsed?: number;
 }
 
-export const SystemStatus = ({ hasDocument, isProcessing, lastQueryTime, tokensUsed }: SystemStatusProps) => {
+export const SystemStatus = ({ hasDocument, isProcessing, lastQueryTime }: SystemStatusProps) => {
   const getSystemStatus = () => {
     if (isProcessing) return { status: 'processing', icon: Activity, color: 'text-warning' };
     if (hasDocument) return { status: 'ready', icon: CheckCircle2, color: 'text-success' };

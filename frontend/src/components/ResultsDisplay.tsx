@@ -1,7 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Progress } from '@/components/ui/progress';
 import { 
   CheckCircle2, 
   XCircle, 
@@ -10,8 +9,6 @@ import {
   Brain, 
   Lightbulb,
   Scale,
-  Clock,
-  ExternalLink
 } from 'lucide-react';
 
 interface Evidence {

@@ -149,7 +149,7 @@ const Index = () => {
               </div>
               <div>
                 <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                  Policy Pundit
+                  Policy Scanner
                 </h1>
                 <p className="text-sm text-muted-foreground">
                   AI-Powered Policy Analysis System
