@@ -13,4 +13,3 @@ services:
     envVars:
       - key: OPENROUTER_API_KEY
         sync: false
-    healthCheckPath: /health 
