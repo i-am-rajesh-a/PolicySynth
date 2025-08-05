@@ -13,10 +13,4 @@ services:
     envVars:
       - key: OPENROUTER_API_KEY
         sync: false
-      - key: CARGO_HOME
-        value: /tmp/cargo
-      - key: RUSTUP_HOME
-        value: /tmp/rustup
-      - key: CARGO_TARGET_DIR
-        value: /tmp/target
     healthCheckPath: /health 
